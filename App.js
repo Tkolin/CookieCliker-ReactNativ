@@ -6,7 +6,7 @@
  * @flow strict-local
  */
 
-import React, {useState} from 'react';
+import React, {useState, useRef, useEffect} from 'react';
 
 //import type {Node} from 'react';
 import {
@@ -20,67 +20,41 @@ import {
   ScrollView,
   Button,
   Alert,
+  Animated,
+  Easing,
 } from 'react-native';
 
-const PayView = (ObjectScore,setObjectScore) => (
-  this.const [ObjectScore, setObjectScore] = useState(0),
-  <View  >
-              <TouchableOpacity 
-                onPress={() => {
-                  if (score >= 1 + grandmaScore * 1.11) {
-                    setScore(score - (1 + grandmaScore * 1.11));
-                    setGrandmaScore(grandmaScore + 1);
-                    setPerClick(perClick + 1);
-                  } else {
-                    Alert.alert(
-                      'Упс...',
-                      'Вам не хватает сахара для приманки',
-                      [{text: 'Понял'}, {text: 'Принял'}],
-                    );
-                  }
-                }}>
-                <Text style={buttonStyles.TextStyle}>
-                  Приманить бабушку, у вас {grandmaScore}, цена сахара{' '}
-                  {(1 + grandmaScore * 1.19).toFixed(2)}
-                </Text>
-                {/*Добавленик картинок в зависимости от количества*/}
-                <View flexDirection="row">
-                  <Image
-                    height={50}
-                    width={50}
-                    source={require('./img/grandma.png')}
-                  />
- 
-                </View>
-              </TouchableOpacity>
-            </View>
-)
 const App = () => {
   const [score, setScore] = useState(0);
   const [perClick, setPerClick] = useState(1);
   const [grandmaScore, setGrandmaScore] = useState(0);
   const [factoryScore, setFactoryScore] = useState(0);
   const [mineScore, setMineScore] = useState(0);
+
   return (
     <SafeAreaView style={styles.All}>
       <View style={styles.Row}>
         <ImageBackground source={require('./img/bgBlack.jpg')}>
-          <Text style={styles.ScoreStyleText}>{score.toFixed(2)}</Text>
-          <TouchableOpacity
-            onPress={() => {
-              setScore(score + perClick);
-            }}>
-            <Image source={require('./img/sugar.png')} style={styles.Cookie} />
-          </TouchableOpacity>
+          <ImageBackground source={require('./img/shine.png')}>
+            <Text style={styles.ScoreStyleText}>{score.toFixed(2)}</Text>
+            <TouchableOpacity
+              onPress={() => {
+                setScore(score + perClick);
+              }}>
+              <Image
+                source={require('./img/sugar.png')}
+                style={styles.Cookie}
+              />
+            </TouchableOpacity>
+          </ImageBackground>
         </ImageBackground>
       </View>
       {/*Вынести из ScrollView в класс для упрощения создания?*/}
-      <View flex={1} backgroundColor="black" paddingVertical={10} >
+      <View flex={1} backgroundColor="black" paddingVertical={10}>
         <ImageBackground source={require('./img/bgBlack.jpg')}>
           <ScrollView>
-            <View  >
-               
-              <TouchableOpacity 
+            <View>
+              <TouchableOpacity
                 onPress={() => {
                   if (score >= 1 + grandmaScore * 1.11) {
                     setScore(score - (1 + grandmaScore * 1.11));
@@ -105,13 +79,12 @@ const App = () => {
                     width={50}
                     source={require('./img/grandma.png')}
                   />
- 
                 </View>
               </TouchableOpacity>
             </View>
 
-            <View  >
-              <TouchableOpacity 
+            <View>
+              <TouchableOpacity
                 onPress={() => {
                   if (score >= 100 + factoryScore * 1.32) {
                     setScore(score - (100 + factoryScore * 1.32));
@@ -136,33 +109,28 @@ const App = () => {
                     width={50}
                     source={require('./img/factory.png')}
                   />
-                  <Image
-                    height={50}
-                    width={50}
-                    source={require('./img/factory.png')}
-                  />
                 </View>
               </TouchableOpacity>
             </View>
 
-            <View  >
-              <TouchableOpacity 
+            <View>
+              <TouchableOpacity
                 onPress={() => {
-                  if (score >= 1 + factoryScore * 666666) {
-                    setScore(score - (1 + factoryScore * 666666));
-                    setFactoryScore(factoryScore + 1);
-                    setPerClick(perClick + 1);
+                  if (score >= (1000 + mineScore) * 1.41 * mineScore) {
+                    setScore(score - ((1000 + mineScore) * 1.41 * mineScore));
+                    setMineScore(mineScore  + 1);
+                    setPerClick(perClick + 20);
                   } else {
                     Alert.alert(
                       'Упс...',
-                      'Да его не купишь у него цена сломаная',
+                      'Вам не хватает сахара для открытия шахты',
                       [{text: 'Понял'}, {text: 'Принял'}],
                     );
                   }
                 }}>
                 <Text style={buttonStyles.TextStyle}>
-                  Выкапать сахарную шахту, у вас {mineScore}, цена сахара{' '}
-                  {(1 + mineScore * 666666).toFixed(2)}
+                  Купить шахту, у вас {mineScore}, цена сахара{' '}
+                  {((1000 + mineScore) * 1.41 * mineScore).toFixed(2)}
                 </Text>
                 {/*Добавленик картинок в зависимости от количества*/}
                 <View flexDirection="row">
@@ -171,11 +139,20 @@ const App = () => {
                     width={50}
                     source={require('./img/mine.png')}
                   />
- 
                 </View>
               </TouchableOpacity>
             </View>
 
+            <View>
+              <TouchableOpacity
+                onPress={() => {
+                  setScore(score + 1000);
+                }}>
+                <Text style={buttonStyles.TextStyle}>Купить читы</Text>
+                {/*Добавленик картинок в зависимости от количества*/}
+                <View flexDirection="row"></View>
+              </TouchableOpacity>
+            </View>
           </ScrollView>
         </ImageBackground>
       </View>
@@ -215,4 +192,5 @@ const buttonStyles = StyleSheet.create({
     alignSelf: 'center',
   },
 });
+
 export default App;
